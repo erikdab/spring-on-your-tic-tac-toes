@@ -1,17 +1,17 @@
 package com.erbur.tictactoes.unit;
 
-import com.erbur.tictactoes.logic.TicTacToesGame;
+import com.erbur.tictactoes.service.TicTacToesGameService;
 import com.erbur.tictactoes.model.Game;
 import com.erbur.tictactoes.model.Player;
 import com.erbur.tictactoes.model.Point;
-import com.erbur.tictactoes.model.Token;
+import com.erbur.tictactoes.model.enums.Token;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TicTacToesGameTest {
+public class TicTacToesGameServiceTest {
     private int BOARD_LENGTH = 5, WIN_LINE_LENGTH = 4;
     private Point validMove = new Point(2, 4);
     private Token[][] almostWin = new Token[][]{
@@ -38,11 +38,11 @@ public class TicTacToesGameTest {
 
     @Test
     public void newGame_BoardAndWinLength() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
-        Game game = ticTacToesGame.getGame();
+        Game game = ticTacToesGameService.getGame();
 
         assertThat(game.getBoardLength()).isEqualTo(BOARD_LENGTH);
         assertThat(game.getWinLineLength()).isEqualTo(WIN_LINE_LENGTH);
@@ -50,64 +50,64 @@ public class TicTacToesGameTest {
 
     @Test
     public void makeMove_Valid() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
-        Game game = ticTacToesGame.getGame();
-        Player[] players = ticTacToesGame.getGame().getPlayers();
+        Game game = ticTacToesGameService.getGame();
+        Player[] players = ticTacToesGameService.getGame().getPlayers();
         Player player = players[0];
         Token token = game.getTokenFor(player);
 
-        ticTacToesGame.makeMove(validMove, player);
+        ticTacToesGameService.makeMove(validMove, player);
         assertThat(game.getBoard().getField(validMove)).isEqualTo(token);
     }
 
     @Test
     public void makeMove_OutsideBox_ExceptionThrown() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
-        Game game = ticTacToesGame.getGame();
-        Player[] players = ticTacToesGame.getGame().getPlayers();
+        Game game = ticTacToesGameService.getGame();
+        Player[] players = ticTacToesGameService.getGame().getPlayers();
         Player player = players[0];
 
         Point move = new Point(0, BOARD_LENGTH + 2);
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Move is outside box!");
-        ticTacToesGame.makeMove(move, player);
+        ticTacToesGameService.makeMove(move, player);
     }
 
     @Test
     public void makeMove_OverANonBlank_ExceptionThrown() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
-        Game game = ticTacToesGame.getGame();
-        Player[] players = ticTacToesGame.getGame().getPlayers();
+        Game game = ticTacToesGameService.getGame();
+        Player[] players = ticTacToesGameService.getGame().getPlayers();
         Player player = players[0];
 
         Point move = new Point(0, BOARD_LENGTH + 2);
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Move is outside box!");
-        ticTacToesGame.makeMove(move, player);
+        ticTacToesGameService.makeMove(move, player);
     }
 
     @Test
     public void makeMove_WinPlayerXDiagonal() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
-        Game game = ticTacToesGame.getGame();
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        Game game = ticTacToesGameService.getGame();
         game.setBoardFields(almostWin);
 
         Player player = game.getPlayerFor(Token.X);
 
-        ticTacToesGame.makeMove(playerXWinMoveDiagonal, player);
+        ticTacToesGameService.makeMove(playerXWinMoveDiagonal, player);
         assertThat(game.isBoardDraw()).isEqualTo(false);
         assertThat(game.isBoardWon()).isEqualTo(true);
         assertThat(game.getWinner()).isEqualTo(player);
@@ -115,15 +115,15 @@ public class TicTacToesGameTest {
 
     @Test
     public void makeMove_WinPlayerXAntiDiagonal() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
-        Game game = ticTacToesGame.getGame();
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        Game game = ticTacToesGameService.getGame();
         game.setBoardFields(almostWin);
 
         Player player = game.getPlayerFor(Token.X);
 
-        ticTacToesGame.makeMove(playerXWinMoveAntiDiagonal, player);
+        ticTacToesGameService.makeMove(playerXWinMoveAntiDiagonal, player);
         assertThat(game.isBoardDraw()).isEqualTo(false);
         assertThat(game.isBoardWon()).isEqualTo(true);
         assertThat(game.getWinner()).isEqualTo(player);
@@ -131,20 +131,20 @@ public class TicTacToesGameTest {
 
     @Test
     public void makeMove_WinPlayerOHorizontal() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
-        Game game = ticTacToesGame.getGame();
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        Game game = ticTacToesGameService.getGame();
         game.setBoardFields(almostWin);
 
         // Player X must play first, then Player 0 can go.
         Player playerX = game.getPlayerFor(Token.X);
 
-        ticTacToesGame.makeMove(playerXNoWinMove, playerX);
+        ticTacToesGameService.makeMove(playerXNoWinMove, playerX);
 
         Player playerO = game.getPlayerFor(Token.O);
 
-        ticTacToesGame.makeMove(playerOWinMoveHorizontal, playerO);
+        ticTacToesGameService.makeMove(playerOWinMoveHorizontal, playerO);
         assertThat(game.isBoardDraw()).isEqualTo(false);
         assertThat(game.isBoardWon()).isEqualTo(true);
         assertThat(game.getWinner()).isEqualTo(playerO);
@@ -152,35 +152,35 @@ public class TicTacToesGameTest {
 
     @Test
     public void makeMove_NotCurrentPlayer() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
-        Game game = ticTacToesGame.getGame();
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        Game game = ticTacToesGameService.getGame();
         game.setBoardFields(almostWin);
 
         Player player = game.getPlayerFor(Token.O);
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Player Frank (O) cannot play now since it is player Erik's (X) turn.");
-        ticTacToesGame.makeMove(playerOWinMoveVertical, player);
+        ticTacToesGameService.makeMove(playerOWinMoveVertical, player);
     }
 
     @Test
     public void makeMove_WinPlayerOVertical() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
-        Game game = ticTacToesGame.getGame();
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        Game game = ticTacToesGameService.getGame();
         game.setBoardFields(almostWin);
 
         // Player X must play first, then Player 0 can go.
         Player playerX = game.getPlayerFor(Token.X);
 
-        ticTacToesGame.makeMove(playerXNoWinMove, playerX);
+        ticTacToesGameService.makeMove(playerXNoWinMove, playerX);
 
         Player playerO = game.getPlayerFor(Token.O);
 
-        ticTacToesGame.makeMove(playerOWinMoveVertical, playerO);
+        ticTacToesGameService.makeMove(playerOWinMoveVertical, playerO);
         assertThat(game.isBoardDraw()).isEqualTo(false);
         assertThat(game.isBoardWon()).isEqualTo(true);
         assertThat(game.getWinner()).isEqualTo(playerO);
@@ -188,16 +188,16 @@ public class TicTacToesGameTest {
 
     @Test
     public void makeMove_DrawPlayerO() {
-        TicTacToesGame ticTacToesGame = new TicTacToesGame();
+        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
-        ticTacToesGame.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
-        Game game = ticTacToesGame.getGame();
+        ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
+        Game game = ticTacToesGameService.getGame();
         game.setBoardFields(almostDraw);
         System.out.println(game.getMoveCount());
 
         Player player = game.getPlayerFor(Token.O);
 
-        ticTacToesGame.makeMove(playerODrawMove, player);
+        ticTacToesGameService.makeMove(playerODrawMove, player);
         assertThat(game.isBoardDraw()).isEqualTo(true);
         assertThat(game.isBoardWon()).isEqualTo(false);
         assertThat(game.getWinner()).isNull();

@@ -1,15 +1,16 @@
-package com.erbur.tictactoes.logic;
+package com.erbur.tictactoes.service;
 
 import com.erbur.tictactoes.model.*;
+import com.erbur.tictactoes.model.enums.Token;
 import org.springframework.stereotype.Service;
 
 @Service()
-public class TicTacToesGame {
+public class TicTacToesGameService {
     private Game game;
 
     // Other things to consider: history, maybe put check victory condition in Board (maybe not)
 
-    public TicTacToesGame() {
+    public TicTacToesGameService() {
     }
 
     // Pass more params in new game.

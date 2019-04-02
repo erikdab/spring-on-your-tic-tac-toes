@@ -2,7 +2,7 @@ package com.erbur.tictactoes.unit;
 
 import com.erbur.tictactoes.model.Game;
 import com.erbur.tictactoes.model.Player;
-import com.erbur.tictactoes.model.Token;
+import com.erbur.tictactoes.model.enums.Token;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

@@ -1,8 +1,8 @@
-package com.erbur.tictactoes.api;
+package com.erbur.tictactoes.rest;
 
 import com.erbur.tictactoes.TicTacToesApplication;
-import com.erbur.tictactoes.dto.GameDTO;
-import com.erbur.tictactoes.dto.GameStatusDTO;
+import com.erbur.tictactoes.model.dto.GameDTO;
+import com.erbur.tictactoes.model.dto.GameStatusDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TicTacToesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class TicTacToesApiTest {
+public class TicTacToesControllerTest {
     @LocalServerPort
     private int port;
 

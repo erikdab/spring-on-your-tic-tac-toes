@@ -1,4 +1,4 @@
-package com.erbur.tictactoes.dto;
+package com.erbur.tictactoes.model.dto;
 
 import com.erbur.tictactoes.model.Board;
 import com.erbur.tictactoes.model.Size;

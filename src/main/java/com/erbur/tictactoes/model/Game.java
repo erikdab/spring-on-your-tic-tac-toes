@@ -2,6 +2,7 @@ package com.erbur.tictactoes.model;
 
 import java.util.*;
 
+import com.erbur.tictactoes.model.enums.Token;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class Game {
 
     private Map<Player, Token> playerTokenMap = new HashMap<>();
 
-    // Should these be placed in board or maybe create a Game class (only data - logic here)
+    // Should these be placed in board or maybe create a Game class (only data - service here)
     private boolean boardWon = false;
     private boolean boardDraw = false;
     private int moveCount = 0;

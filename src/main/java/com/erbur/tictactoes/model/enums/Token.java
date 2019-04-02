@@ -1,4 +1,4 @@
-package com.erbur.tictactoes.model;
+package com.erbur.tictactoes.model.enums;
 
 public enum Token {
     Blank,
