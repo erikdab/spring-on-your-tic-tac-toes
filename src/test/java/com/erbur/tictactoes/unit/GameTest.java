@@ -1,4 +1,4 @@
-package com.erbur.tictactoes;
+package com.erbur.tictactoes.unit;
 
 import com.erbur.tictactoes.model.Game;
 import com.erbur.tictactoes.model.Player;

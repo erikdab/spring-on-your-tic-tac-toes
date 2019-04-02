@@ -1,5 +1,6 @@
-package com.erbur.tictactoes;
+package com.erbur.tictactoes.api;
 
+import com.erbur.tictactoes.TicTacToesApplication;
 import com.erbur.tictactoes.dto.GameDTO;
 import com.erbur.tictactoes.dto.GameStatusDTO;
 import org.junit.Before;
