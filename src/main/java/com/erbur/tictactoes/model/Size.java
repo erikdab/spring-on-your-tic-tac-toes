@@ -1,10 +1,20 @@
 package com.erbur.tictactoes.model;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Size {
     private int width;
     private int height;
 
-    public Size() {}
     public Size(int width, int height) {
         this.width = width;
         this.height = height;
@@ -14,11 +24,6 @@ public class Size {
         this.width = otherSize.width;
         this.height = otherSize.height;
     }
-
-    public void setWidth(int width) { this.width = width; }
-    public void setHeight(int height) { this.height = height; }
-    public int getWidth() { return this.width; }
-    public int getHeight() { return this.height; }
 
     // Not equals - this doesn't check if its the same object, but if they are similar.
     public boolean compareTo(Size otherSize) {

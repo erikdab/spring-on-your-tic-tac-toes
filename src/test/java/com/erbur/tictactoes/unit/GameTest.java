@@ -6,35 +6,32 @@ import com.erbur.tictactoes.model.Token;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class GameTest {
     private int BOARD_LENGTH = 10, WIN_LINE_LENGTH = 10;
     private int TOO_SMALL_BOARD_LENGTH = 2, TOO_SMALL_WIN_LINE_LENGTH = 2;
 
-    private Player[]players = new Player[]{ new Player("Frank"), new Player("Erik") };
-    private Player []players1 = new Player[]{ new Player("Frank") };
-    private Player []players3 = new Player[]{ new Player("Frank"), new Player("Erik"), new Player("Frederyk") };
+    private Player[] players = new Player[]{new Player("Frank"), new Player("Erik")};
+    private Player[] players1 = new Player[]{new Player("Frank")};
+    private Player[] players3 = new Player[]{new Player("Frank"), new Player("Erik"), new Player("Frederyk")};
     private Player outsider = new Player("Frederyk");
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Test public void newGame_ValidStatistics() {
+    @Test
+    public void newGame_ValidStatistics() {
         Game game;
-        
+
         game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[0], players[1]);
 
         assertThat(game.getMoveCount()).isEqualTo(0);
     }
 
-    @Test public void newGame_ValidSizes() {
+    @Test
+    public void newGame_ValidSizes() {
         Game game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[0], players[1]);
 
         assertThat(game.getBoardLength()).isEqualTo(BOARD_LENGTH);
@@ -47,7 +44,8 @@ public class GameTest {
         assertThat(game.getBoard().getFields()[0].length).isEqualTo(BOARD_LENGTH);
     }
 
-    @Test public void newGame_ValidPlayerAssignments() {
+    @Test
+    public void newGame_ValidPlayerAssignments() {
         Game game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[0], players[1]);
 
         // Verify that the players were properly set:
@@ -55,8 +53,8 @@ public class GameTest {
         assertThat(game.getPlayers()).contains(players[1]);
 
         // Verify that the first player / playerX is properly set:
-        for(int i=0;i<2;i++) {
-            for(int j=0;i<2;i++) {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; i < 2; i++) {
                 game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[i], players[j]);
 
                 assertThat(game.getFirstPlayer()).isEqualTo(players[i]);
@@ -65,45 +63,52 @@ public class GameTest {
         }
     }
 
-    @Test public void winLineLength_GreaterThanBoardLength() {
+    @Test
+    public void winLineLength_GreaterThanBoardLength() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Win Line Length cannot be greater than Board Length or there would be no way to win!");
-        new Game(BOARD_LENGTH,BOARD_LENGTH+1, players, players[0], players[1]);
+        new Game(BOARD_LENGTH, BOARD_LENGTH + 1, players, players[0], players[1]);
     }
 
-    @Test public void boardLength_TooSmall() {
+    @Test
+    public void boardLength_TooSmall() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Board Length must be greater than 3 or the game would be too easy!");
-        new Game(TOO_SMALL_BOARD_LENGTH,TOO_SMALL_BOARD_LENGTH, players, players[0], players[1]);
+        new Game(TOO_SMALL_BOARD_LENGTH, TOO_SMALL_BOARD_LENGTH, players, players[0], players[1]);
     }
 
-    @Test public void winLineLength_TooSmall() {
+    @Test
+    public void winLineLength_TooSmall() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Win Line Length must be greater than 3 or the game would be too easy!");
-        new Game(BOARD_LENGTH,TOO_SMALL_WIN_LINE_LENGTH, players, players[0], players[1]);
+        new Game(BOARD_LENGTH, TOO_SMALL_WIN_LINE_LENGTH, players, players[0], players[1]);
     }
 
-    @Test public void players_TooFew() {
+    @Test
+    public void players_TooFew() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Each TicTacToe game must have exactly 2 players!");
-        new Game(BOARD_LENGTH,WIN_LINE_LENGTH, players1, players1[0], players1[0]);
+        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players1, players1[0], players1[0]);
     }
 
-    @Test public void players_TooMany() {
+    @Test
+    public void players_TooMany() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Each TicTacToe game must have exactly 2 players!");
-        new Game(BOARD_LENGTH,WIN_LINE_LENGTH, players3, players3[0], players3[1]);
+        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players3, players3[0], players3[1]);
     }
 
-    @Test public void firstPlayer_Outsider() {
+    @Test
+    public void firstPlayer_Outsider() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("First Player and Player X must be players actually playing the game!");
-        new Game(BOARD_LENGTH,WIN_LINE_LENGTH, players, outsider, players[0]);
+        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, outsider, players[0]);
     }
 
-    @Test public void playerX_Outsider() {
+    @Test
+    public void playerX_Outsider() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("First Player and Player X must be players actually playing the game!");
-        new Game(BOARD_LENGTH,WIN_LINE_LENGTH, players, players[0], outsider);
+        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[0], outsider);
     }
 }

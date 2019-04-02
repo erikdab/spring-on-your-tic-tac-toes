@@ -6,7 +6,7 @@ public enum Token {
     O;
 
     public char toChar() {
-        switch(this) {
+        switch (this) {
             case X:
                 return 'X';
             case O:
@@ -17,14 +17,17 @@ public enum Token {
     }
 
     public String toString() {
-        return ""+toChar();
+        return "" + toChar();
     }
 
     public static Token fromChar(char token) {
-        switch(token) {
-            case 'X': return Token.X;
-            case 'O': return Token.O;
-            default: return Token.Blank;
+        switch (token) {
+            case 'X':
+                return Token.X;
+            case 'O':
+                return Token.O;
+            default:
+                return Token.Blank;
         }
     }
 }

@@ -1,5 +1,16 @@
 package com.erbur.tictactoes.model;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Point {
     private int x;
     private int y;
@@ -14,9 +25,6 @@ public class Point {
         this.y = otherPoint.y;
     }
 
-    public int getX() { return this.x; }
-    public int getY() { return this.y; }
-
     // At 0 on x or y-axis
     public boolean atZeroAxis(Size box) {
         return x == 0 || y == 0;
@@ -24,7 +32,7 @@ public class Point {
 
     // At 0 on x or y-axis
     public boolean atBorders(Size box) {
-        return x == 0 || y == 0 || x == box.getWidth()-1 || y == box.getHeight()-1;
+        return x == 0 || y == 0 || x == box.getWidth() - 1 || y == box.getHeight() - 1;
     }
 
     // Not equals - this doesn't check if its the same object, but if they are similar.

@@ -1,7 +1,16 @@
 package com.erbur.tictactoes.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Entity;
 import java.util.*;
 
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Game {
     private Board board;
 
@@ -16,36 +25,44 @@ public class Game {
     private Player winner = null;
 
     private Player firstPlayer;
+    private Player secondPlayer;
 
     private int boardLength;
     private int winLineLength;
 
     // Another constructor with board?
     public Game(int boardLength, int winLineLength, Player[] players, Player firstPlayer, Player playerX) {
-        if(boardLength < 3)
+        if (boardLength < 3)
             throw new IllegalArgumentException("Board Length must be greater than 3 or the game would be too easy!");
 
-        if(winLineLength > boardLength)
+        if (winLineLength > boardLength)
             throw new IllegalArgumentException("Win Line Length cannot be greater than Board Length or there would be no way to win!");
-        else if(winLineLength < 3)
+        else if (winLineLength < 3)
             throw new IllegalArgumentException("Win Line Length must be greater than 3 or the game would be too easy!");
 
         this.boardLength = boardLength;
         this.board = new Board(boardLength, boardLength);
         this.winLineLength = winLineLength;
 
-        if(players.length != 2) throw new IllegalArgumentException("Each TicTacToe game must have exactly 2 players!");
+        if (players.length != 2) throw new IllegalArgumentException("Each TicTacToe game must have exactly 2 players!");
         this.players = new ArrayList<>(Arrays.asList(players));
 
-        if(! this.players.contains(firstPlayer) || ! this.players.contains(playerX)) {
+        if (!this.players.contains(firstPlayer) || !this.players.contains(playerX)) {
             throw new IllegalArgumentException("First Player and Player X must be players actually playing the game!");
         }
 
         this.firstPlayer = firstPlayer;
+        int[] indexes = {0, 1};
+        int firstPlayerIndex = this.players.indexOf(firstPlayer);
+        for (int index : indexes) {
+            if (index != firstPlayerIndex) {
+                this.secondPlayer = this.players.get(index);
+            }
+        }
 
         this.playerTokenMap.put(playerX, Token.X);
-        for(Player player : this.players) {
-            if(player != playerX) {
+        for (Player player : this.players) {
+            if (player != playerX) {
                 this.playerTokenMap.put(player, Token.O);
             }
         }
@@ -54,9 +71,9 @@ public class Game {
     public void setBoardFields(Token[][] fields) {
         board.setFields(fields);
         moveCount = 0;
-        for(Token[] row : fields) {
-            for(Token cell : row) {
-                if(cell != Token.Blank) moveCount++;
+        for (Token[] row : fields) {
+            for (Token cell : row) {
+                if (cell != Token.Blank) moveCount++;
             }
         }
     }
@@ -66,21 +83,14 @@ public class Game {
         this.boardWon = true;
     }
 
-    public void setDraw() {
-        this.boardDraw = true;
-    }
-
-    public boolean isBoardDraw() {
-        return boardDraw;
-    }
-
     public void addMove(Point move, Player player) {
-        if(isBoardDraw() || isBoardDraw()) throw new IllegalArgumentException("This game is completed, start a new game to continue playing.");
+        if (isBoardDraw() || isBoardWon())
+            throw new IllegalArgumentException("This game is completed, start a new game to continue playing.");
         Player currentPlayer = getCurrentPlayer();
-        if(player != currentPlayer) throw new IllegalArgumentException(
+        if (player != currentPlayer) throw new IllegalArgumentException(
                 String.format("Player %s (%s) cannot play now since it is player %s's (%s) turn.",
-                player, getTokenFor(player).toChar(), currentPlayer, getTokenFor(currentPlayer)));
-        if(move.outside(board.getSize())) throw new IllegalArgumentException("Move is outside box!");
+                        player, getTokenFor(player).toChar(), currentPlayer, getTokenFor(currentPlayer)));
+        if (move.outside(board.getSize())) throw new IllegalArgumentException("Move is outside box!");
         board.setField(move, getTokenFor(player));
         moveCount++;
     }
@@ -90,26 +100,14 @@ public class Game {
     }
 
     public Player getPlayerFor(Token token) {
-        for(Player player : players) {
-            if(getTokenFor(player) == token) return player;
+        for (Player player : players) {
+            if (getTokenFor(player) == token) return player;
         }
         throw new IllegalStateException(String.format("Game does not have a player for token: %s", token));
     }
 
-    public boolean isBoardWon() {
-        return boardWon;
-    }
-
-    public Player getWinner() {
-        return winner;
-    }
-
     public Token getWinnerToken() {
         return getTokenFor(winner);
-    }
-
-    public int getMoveCount() {
-        return moveCount;
     }
 
     public Player[] getPlayers() {
@@ -118,43 +116,16 @@ public class Game {
         return players.toArray(playersArr);
     }
 
-    public Board getBoard() {
-        return board;
-    }
-
     public Player getCurrentPlayer() {
         int playerIndex = moveCount % 2;
         return players.get(playerIndex);
-    }
-
-    public Player getFirstPlayer() {
-        return firstPlayer;
     }
 
     public Token getFirstPlayerToken() {
         return getTokenFor(firstPlayer);
     }
 
-    public Player getSecondPlayer() {
-        int []indexes = {0, 1};
-        int firstPlayerIndex = players.indexOf(firstPlayer);
-        for(int index : indexes) {
-            if(index != firstPlayerIndex) {
-                return players.get(index);
-            }
-        }
-        return null;
-    }
-
     public Token getSecondPlayerToken() {
         return getTokenFor(getSecondPlayer());
-    }
-
-    public int getBoardLength() {
-        return boardLength;
-    }
-
-    public int getWinLineLength() {
-        return winLineLength;
     }
 }
