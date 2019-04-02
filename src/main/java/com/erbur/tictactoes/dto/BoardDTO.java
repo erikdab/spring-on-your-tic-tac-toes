@@ -2,13 +2,12 @@ package com.erbur.tictactoes.dto;
 
 import com.erbur.tictactoes.model.Board;
 import com.erbur.tictactoes.model.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-
-@Entity
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
