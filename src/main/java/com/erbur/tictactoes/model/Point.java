@@ -1,4 +1,4 @@
-package com.erbur.tictactoes;
+package com.erbur.tictactoes.model;
 
 public class Point {
     private int x;

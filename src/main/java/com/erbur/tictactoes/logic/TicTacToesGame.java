@@ -1,5 +1,6 @@
-package com.erbur.tictactoes;
+package com.erbur.tictactoes.logic;
 
+import com.erbur.tictactoes.model.*;
 import org.springframework.stereotype.Service;
 
 @Service()
@@ -15,7 +16,7 @@ public class TicTacToesGame {
     public void newGame(int boardLength, int winLineLength) {
         // These could be in the database
         // They can have statistics of how many victories / etc.
-        Player []players = new Player[]{ new Player("Frank"), new Player("Erik") };
+        Player[]players = new Player[]{ new Player("Frank"), new Player("Erik") };
 
         game = new Game(boardLength, winLineLength, players, players[0], players[1]);
     }
@@ -95,7 +96,7 @@ public class TicTacToesGame {
     private boolean checkDraw() {
         int boardLength = game.getBoardLength();
 
-        return game.getMoveCount() == (Math.pow(boardLength, 2) - 1);
+        return game.getMoveCount() >= (Math.pow(boardLength, 2) - 1);
     }
 
     // I could easily make this work for checking victory condition whenever,

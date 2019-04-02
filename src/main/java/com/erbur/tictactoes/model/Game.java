@@ -1,4 +1,4 @@
-package com.erbur.tictactoes;
+package com.erbur.tictactoes.model;
 
 import java.util.*;
 
@@ -75,8 +75,14 @@ public class Game {
     }
 
     public void addMove(Point move, Player player) {
+        if(isBoardDraw() || isBoardDraw()) throw new IllegalArgumentException("This game is completed, start a new game to continue playing.");
+        Player currentPlayer = getCurrentPlayer();
+        if(player != currentPlayer) throw new IllegalArgumentException(
+                String.format("Player %s (%s) cannot play now since it is player %s's (%s) turn.",
+                player, getTokenFor(player).toChar(), currentPlayer, getTokenFor(currentPlayer)));
         if(move.outside(board.getSize())) throw new IllegalArgumentException("Move is outside box!");
         board.setField(move, getTokenFor(player));
+        moveCount++;
     }
 
     public Token getTokenFor(Player player) {
@@ -98,6 +104,10 @@ public class Game {
         return winner;
     }
 
+    public Token getWinnerToken() {
+        return getTokenFor(winner);
+    }
+
     public int getMoveCount() {
         return moveCount;
     }
@@ -112,8 +122,32 @@ public class Game {
         return board;
     }
 
+    public Player getCurrentPlayer() {
+        int playerIndex = moveCount % 2;
+        return players.get(playerIndex);
+    }
+
     public Player getFirstPlayer() {
         return firstPlayer;
+    }
+
+    public Token getFirstPlayerToken() {
+        return getTokenFor(firstPlayer);
+    }
+
+    public Player getSecondPlayer() {
+        int []indexes = {0, 1};
+        int firstPlayerIndex = players.indexOf(firstPlayer);
+        for(int index : indexes) {
+            if(index != firstPlayerIndex) {
+                return players.get(index);
+            }
+        }
+        return null;
+    }
+
+    public Token getSecondPlayerToken() {
+        return getTokenFor(getSecondPlayer());
     }
 
     public int getBoardLength() {

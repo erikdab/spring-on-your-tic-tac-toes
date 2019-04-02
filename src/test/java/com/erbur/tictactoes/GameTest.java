@@ -1,5 +1,8 @@
 package com.erbur.tictactoes;
 
+import com.erbur.tictactoes.model.Game;
+import com.erbur.tictactoes.model.Player;
+import com.erbur.tictactoes.model.Token;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -15,7 +18,7 @@ public class GameTest {
     private int BOARD_LENGTH = 10, WIN_LINE_LENGTH = 10;
     private int TOO_SMALL_BOARD_LENGTH = 2, TOO_SMALL_WIN_LINE_LENGTH = 2;
 
-    private Player []players = new Player[]{ new Player("Frank"), new Player("Erik") };
+    private Player[]players = new Player[]{ new Player("Frank"), new Player("Erik") };
     private Player []players1 = new Player[]{ new Player("Frank") };
     private Player []players3 = new Player[]{ new Player("Frank"), new Player("Erik"), new Player("Frederyk") };
     private Player outsider = new Player("Frederyk");

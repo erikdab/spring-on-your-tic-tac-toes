@@ -1,4 +1,4 @@
-package com.erbur.tictactoes;
+package com.erbur.tictactoes.model;
 
 public class Player {
     private String name;
@@ -8,6 +8,10 @@ public class Player {
     }
 
     public String getName() {
+        return name;
+    }
+
+    public String toString() {
         return name;
     }
 }

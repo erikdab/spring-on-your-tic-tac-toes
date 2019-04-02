@@ -1,4 +1,4 @@
-package com.erbur.tictactoes;
+package com.erbur.tictactoes.model;
 
 public class Board {
     //[row][column]
@@ -75,5 +75,15 @@ public class Board {
             result.append("\n");
         }
         return result.toString();
+    }
+
+    public char[][] getFieldsChar() {
+        char [][]fieldsChar = new char[size.getHeight()][size.getWidth()];
+        for(int x = 0; x < size.getWidth(); x++) {
+            for(int y = 0;  y < size.getHeight(); y++) {
+                fieldsChar[y][x] = fields[y][x].toChar();
+            }
+        }
+        return fieldsChar;
     }
 }
