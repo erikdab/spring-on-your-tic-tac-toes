@@ -13,8 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,6 +75,7 @@ public class TicTacToesApiTest {
         assertThat(actual).isNotNull();
         assertThat(actual.getBoardLength()).isEqualTo(9);
         assertThat(actual.getWinLineLength()).isEqualTo(4);
+        assertThat(actual.getCurrentPlayer()).isEqualTo(actual.getPlayer1Name());
     }
 
     @Test
@@ -98,7 +97,6 @@ public class TicTacToesApiTest {
 
         GameStatusDTO makeMoveOActual = makeMoveOResponse.getBody();
         assertThat(makeMoveOActual).isNotNull();
-        System.out.println(makeMoveOActual);
         assertThat(makeMoveOActual.getMoveCount()).isEqualTo(1);
         assertThat(makeMoveOActual.getBoard().getFields()[1][0]).isEqualTo('O');
 

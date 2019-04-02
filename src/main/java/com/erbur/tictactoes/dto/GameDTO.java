@@ -7,6 +7,7 @@ public class GameDTO {
     private char player1Token;
     private String player2Name;
     private char player2Token;
+    private String currentPlayer;
 
     private int boardLength;
     private int winLineLength;
@@ -25,6 +26,7 @@ public class GameDTO {
     public GameDTO(Game game) {
         this.setPlayer1Name(game.getFirstPlayer().getName());
         this.setPlayer2Name(game.getSecondPlayer().getName());
+        this.setCurrentPlayer(game.getCurrentPlayer().getName());
         this.setPlayer1Token(game.getFirstPlayerToken().toChar());
         this.setPlayer2Token(game.getSecondPlayerToken().toChar());
         this.setBoardLength(game.getBoardLength());
@@ -77,5 +79,13 @@ public class GameDTO {
 
     public void setWinLineLength(int winLineLength) {
         this.winLineLength = winLineLength;
+    }
+
+    public String getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(String currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 }
