@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class TicTacToesController {
+public class TicTacToesRestController {
     private TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
 
     @RequestMapping("/new-game")

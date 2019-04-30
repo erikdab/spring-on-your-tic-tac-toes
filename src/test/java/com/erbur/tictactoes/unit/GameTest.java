@@ -37,11 +37,11 @@ public class GameTest {
         assertThat(game.getBoardLength()).isEqualTo(BOARD_LENGTH);
         assertThat(game.getWinLineLength()).isEqualTo(WIN_LINE_LENGTH);
 
-        assertThat(game.getBoard().getSize().getWidth()).isEqualTo(BOARD_LENGTH);
-        assertThat(game.getBoard().getSize().getHeight()).isEqualTo(BOARD_LENGTH);
+        assertThat(game.boardGet().getSize().getWidth()).isEqualTo(BOARD_LENGTH);
+        assertThat(game.boardGet().getSize().getHeight()).isEqualTo(BOARD_LENGTH);
 
-        assertThat(game.getBoard().getFields().length).isEqualTo(BOARD_LENGTH);
-        assertThat(game.getBoard().getFields()[0].length).isEqualTo(BOARD_LENGTH);
+        assertThat(game.boardGet().getFields().length).isEqualTo(BOARD_LENGTH);
+        assertThat(game.boardGet().getFields()[0].length).isEqualTo(BOARD_LENGTH);
     }
 
     @Test

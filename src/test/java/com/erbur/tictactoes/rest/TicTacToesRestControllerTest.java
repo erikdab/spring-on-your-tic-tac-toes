@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TicTacToesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class TicTacToesControllerTest {
+public class TicTacToesRestControllerTest {
     @LocalServerPort
     private int port;
 
@@ -78,7 +78,7 @@ public class TicTacToesControllerTest {
         assertThat(actual).isNotNull();
         assertThat(actual.getBoardLength()).isEqualTo(9);
         assertThat(actual.getWinLineLength()).isEqualTo(4);
-        assertThat(actual.getCurrentPlayer()).isEqualTo(actual.getPlayer1Name());
+        assertThat(actual.getCurrentPlayer()).isEqualTo(actual.getFirstPlayerId());
     }
 
     @Test

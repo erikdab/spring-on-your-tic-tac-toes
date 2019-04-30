@@ -60,7 +60,7 @@ public class TicTacToesGameServiceTest {
         Token token = game.getTokenFor(player);
 
         ticTacToesGameService.makeMove(validMove, player);
-        assertThat(game.getBoard().getField(validMove)).isEqualTo(token);
+        assertThat(game.boardGet().getField(validMove)).isEqualTo(token);
     }
 
     @Test

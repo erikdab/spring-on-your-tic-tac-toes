@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Embeddable;
+
 @Data
+@Embeddable
 @Getter
 @Setter
 @NoArgsConstructor

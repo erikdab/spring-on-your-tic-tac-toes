@@ -19,7 +19,11 @@ public class TicTacToesGameService {
         // They can have statistics of how many victories / etc.
         Player[] players = new Player[]{new Player("Frank"), new Player("Erik")};
 
-        game = new Game(boardLength, winLineLength, players, players[0], players[1]);
+        game = new Game(boardLength, winLineLength, players[0], players[1], players[1]);
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public void makeMove(Point point, Player player) {
@@ -36,7 +40,7 @@ public class TicTacToesGameService {
     private boolean checkWinHorizontal(Point move, Token token, boolean horizontal) {
         int x = move.getX();
         int y = move.getY();
-        Board board = game.getBoard();
+        Board board = game.boardGet();
         int boardLength = game.getBoardLength();
         int winLineLength = game.getWinLineLength();
 
@@ -67,7 +71,7 @@ public class TicTacToesGameService {
     private boolean checkWinDiagonal(Point move, Token token, boolean diagonal) {
         if (!legalDiagonal(move, diagonal)) return false;
 
-        Board board = game.getBoard();
+        Board board = game.boardGet();
         Size boardSize = board.getSize();
         int winLineLength = game.getWinLineLength();
 

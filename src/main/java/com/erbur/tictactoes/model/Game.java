@@ -8,31 +8,61 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 @Data
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "game")
 public class Game {
-    private Board board;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private List<Player> players;
+    @Transient
+    private transient Board board = null;
 
-    private Map<Player, Token> playerTokenMap = new HashMap<>();
+    @Transient
+    public Board boardGet() {
+        if (board == null) setupBoard();
+        return board;
+    }
+
+    private void setupBoard() {
+        board = new Board(boardLength, boardLength);
+        for (GameMove gameMove : gameMoves) {
+            addMove(gameMove.position, gameMove.player);
+        }
+    }
 
     // Should these be placed in board or maybe create a Game class (only data - service here)
     private boolean boardWon = false;
     private boolean boardDraw = false;
-    private int moveCount = 0;
-    private Player winner = null;
+    private transient int moveCount = 0;
+    private Token winnerToken = null;
 
+    @ManyToOne
+    @JoinColumn
     private Player firstPlayer;
+    private Token firstPlayerToken;
+    @ManyToOne
+    @JoinColumn
     private Player secondPlayer;
+    private Token secondPlayerToken;
 
+    @NotNull
     private int boardLength;
+    @NotNull
     private int winLineLength;
 
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<GameMove> gameMoves;
+
     // Another constructor with board?
-    public Game(int boardLength, int winLineLength, Player[] players, Player firstPlayer, Player playerX) {
+    public Game(int boardLength, int winLineLength, Player firstPlayer, Player secondPlayer, Player playerX) {
         if (boardLength < 3)
             throw new IllegalArgumentException("Board Length must be greater than 3 or the game would be too easy!");
 
@@ -45,28 +75,23 @@ public class Game {
         this.board = new Board(boardLength, boardLength);
         this.winLineLength = winLineLength;
 
-        if (players.length != 2) throw new IllegalArgumentException("Each TicTacToe game must have exactly 2 players!");
-        this.players = new ArrayList<>(Arrays.asList(players));
-
-        if (!this.players.contains(firstPlayer) || !this.players.contains(playerX)) {
-            throw new IllegalArgumentException("First Player and Player X must be players actually playing the game!");
+        if (firstPlayer == secondPlayer) {
+            throw new IllegalArgumentException("First Player and Second Player must be different!");
+        }
+        if (firstPlayer != playerX && secondPlayer != playerX) {
+            throw new IllegalArgumentException("Player X must be First or Second Player!");
         }
 
         this.firstPlayer = firstPlayer;
-        int[] indexes = {0, 1};
-        int firstPlayerIndex = this.players.indexOf(firstPlayer);
-        for (int index : indexes) {
-            if (index != firstPlayerIndex) {
-                this.secondPlayer = this.players.get(index);
-            }
-        }
+        this.secondPlayer = secondPlayer;
 
-        this.playerTokenMap.put(playerX, Token.X);
-        for (Player player : this.players) {
-            if (player != playerX) {
-                this.playerTokenMap.put(player, Token.O);
-            }
-        }
+        firstPlayerToken = playerX == firstPlayer ? Token.X : Token.O;
+        secondPlayerToken = firstPlayerToken == Token.X ? Token.O : Token.X;
+    }
+
+    public void setGameMoves(List<GameMove> gameMoves) {
+        this.gameMoves = gameMoves;
+        setupBoard();
     }
 
     public void setBoardFields(Token[][] fields) {
@@ -80,8 +105,21 @@ public class Game {
     }
 
     public void setWinner(Player player) {
-        this.winner = player;
+        setWinnerToken(getTokenFor(player));
+    }
+
+    public void setWinnerToken(Token token) {
+        this.winnerToken = token;
         this.boardWon = true;
+    }
+
+    public Player getWinner() {
+        if(! this.boardWon) return null;
+        return getPlayerFor(winnerToken);
+    }
+
+    public Player getOtherPlayer(Player player) {
+        return firstPlayer == player ? firstPlayer : secondPlayer;
     }
 
     public void addMove(Point move, Player player) {
@@ -91,35 +129,21 @@ public class Game {
         if (player != currentPlayer) throw new IllegalArgumentException(
                 String.format("Player %s (%s) cannot play now since it is player %s's (%s) turn.",
                         player, getTokenFor(player).toChar(), currentPlayer, getTokenFor(currentPlayer)));
-        if (move.outside(board.getSize())) throw new IllegalArgumentException("Move is outside box!");
-        board.setField(move, getTokenFor(player));
+        if (move.outside(boardGet().getSize())) throw new IllegalArgumentException("Move is outside box!");
+        boardGet().setField(move, getTokenFor(player));
         moveCount++;
     }
 
     public Token getTokenFor(Player player) {
-        return playerTokenMap.get(player);
+        return player == firstPlayer ? firstPlayerToken : secondPlayerToken;
     }
 
     public Player getPlayerFor(Token token) {
-        for (Player player : players) {
-            if (getTokenFor(player) == token) return player;
-        }
-        throw new IllegalStateException(String.format("Game does not have a player for token: %s", token));
-    }
-
-    public Token getWinnerToken() {
-        return getTokenFor(winner);
-    }
-
-    public Player[] getPlayers() {
-        Player[] playersArr = new Player[players.size()];
-
-        return players.toArray(playersArr);
+        return firstPlayerToken == token ? firstPlayer : secondPlayer;
     }
 
     public Player getCurrentPlayer() {
-        int playerIndex = moveCount % 2;
-        return players.get(playerIndex);
+        return moveCount % 2 == 0 ? firstPlayer : secondPlayer;
     }
 
     public Token getFirstPlayerToken() {

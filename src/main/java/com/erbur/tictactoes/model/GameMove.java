@@ -13,20 +13,23 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "player")
-public class Player {
+@Table(name = "game_move")
+public class GameMove {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private String name;
+    int moveNumber;
 
-    public Player(String name) {
-        this.name = name;
-    }
+    @NotNull
+    Point position;
 
-    public String toString() {
-        return name;
-    }
+    @ManyToOne
+    @JoinColumn
+    Player player;
+
+    @ManyToOne
+    @JoinColumn
+    Game game;
 }
