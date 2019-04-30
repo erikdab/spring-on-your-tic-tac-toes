@@ -1,17 +1,13 @@
 package com.erbur.tictactoes.model;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "player")
 public class Player {
@@ -26,6 +22,7 @@ public class Player {
         this.name = name;
     }
 
+    @Override
     public String toString() {
         return name;
     }

@@ -1,20 +1,15 @@
 package com.erbur.tictactoes.model;
 
-import java.util.*;
-
 import com.erbur.tictactoes.model.enums.Token;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "game")
 public class Game {

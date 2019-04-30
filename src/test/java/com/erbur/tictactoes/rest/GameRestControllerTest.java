@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TicTacToesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class TicTacToesRestControllerTest {
+public class GameRestControllerTest {
     @LocalServerPort
     private int port;
 
@@ -36,7 +36,7 @@ public class TicTacToesRestControllerTest {
 
     @Before
     public void setupTests() {
-        newGameUriBuilder = UriComponentsBuilder.fromHttpUrl(createURLWithPort("/new-game"))
+        newGameUriBuilder = UriComponentsBuilder.fromHttpUrl(createURLWithPort("/games/"))
                 .queryParam("boardLength", 9)
                 .queryParam("winLineLength", 4);
 
@@ -74,11 +74,9 @@ public class TicTacToesRestControllerTest {
                 newGameUriBuilder.toUriString(), HttpMethod.GET, entity, GameDTO.class);
 
         GameDTO actual = response.getBody();
-
         assertThat(actual).isNotNull();
         assertThat(actual.getBoardLength()).isEqualTo(9);
         assertThat(actual.getWinLineLength()).isEqualTo(4);
-        assertThat(actual.getCurrentPlayer()).isEqualTo(actual.getFirstPlayerId());
     }
 
     @Test

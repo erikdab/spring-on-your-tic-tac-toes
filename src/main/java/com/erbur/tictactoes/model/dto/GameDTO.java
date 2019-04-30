@@ -3,13 +3,9 @@ package com.erbur.tictactoes.model.dto;
 import com.erbur.tictactoes.model.Game;
 import com.erbur.tictactoes.model.enums.Token;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 public class GameDTO {
     private Long firstPlayerId;

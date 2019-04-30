@@ -3,11 +3,10 @@ package com.erbur.tictactoes.model.dto;
 import com.erbur.tictactoes.model.GameMove;
 import com.erbur.tictactoes.model.Point;
 import com.erbur.tictactoes.model.enums.Token;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 public class GameMoveDTO {
     Long gameId;

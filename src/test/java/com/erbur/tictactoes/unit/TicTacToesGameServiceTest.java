@@ -55,8 +55,7 @@ public class TicTacToesGameServiceTest {
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
         Game game = ticTacToesGameService.getGame();
-        Player[] players = ticTacToesGameService.getGame().getPlayers();
-        Player player = players[0];
+        Player player = ticTacToesGameService.getGame().getFirstPlayer();
         Token token = game.getTokenFor(player);
 
         ticTacToesGameService.makeMove(validMove, player);
@@ -70,8 +69,7 @@ public class TicTacToesGameServiceTest {
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
         Game game = ticTacToesGameService.getGame();
-        Player[] players = ticTacToesGameService.getGame().getPlayers();
-        Player player = players[0];
+        Player player = ticTacToesGameService.getGame().getFirstPlayer();
 
         Point move = new Point(0, BOARD_LENGTH + 2);
 
@@ -87,8 +85,7 @@ public class TicTacToesGameServiceTest {
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
         Game game = ticTacToesGameService.getGame();
-        Player[] players = ticTacToesGameService.getGame().getPlayers();
-        Player player = players[0];
+        Player player = ticTacToesGameService.getGame().getFirstPlayer();
 
         Point move = new Point(0, BOARD_LENGTH + 2);
 

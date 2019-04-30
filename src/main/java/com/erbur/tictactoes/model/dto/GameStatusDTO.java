@@ -3,16 +3,12 @@ package com.erbur.tictactoes.model.dto;
 import com.erbur.tictactoes.model.Game;
 import com.erbur.tictactoes.model.GameMove;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 public class GameStatusDTO {
     private boolean isWon;

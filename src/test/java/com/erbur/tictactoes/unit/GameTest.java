@@ -25,14 +25,14 @@ public class GameTest {
     public void newGame_ValidStatistics() {
         Game game;
 
-        game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[0], players[1]);
+        game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players[0], players[1], players[1]);
 
         assertThat(game.getMoveCount()).isEqualTo(0);
     }
 
     @Test
     public void newGame_ValidSizes() {
-        Game game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[0], players[1]);
+        Game game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players[0], players[1], players[1]);
 
         assertThat(game.getBoardLength()).isEqualTo(BOARD_LENGTH);
         assertThat(game.getWinLineLength()).isEqualTo(WIN_LINE_LENGTH);
@@ -46,16 +46,16 @@ public class GameTest {
 
     @Test
     public void newGame_ValidPlayerAssignments() {
-        Game game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[0], players[1]);
+        Game game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players[0], players[1], players[1]);
 
         // Verify that the players were properly set:
-        assertThat(game.getPlayers()).contains(players[0]);
-        assertThat(game.getPlayers()).contains(players[1]);
+        assertThat(game.getFirstPlayer()).isEqualTo(players[0]);
+        assertThat(game.getSecondPlayer()).isEqualTo(players[1]);
 
         // Verify that the first player / playerX is properly set:
         for (int i = 0; i < 2; i++) {
             for (int j = 0; i < 2; i++) {
-                game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[i], players[j]);
+                game = new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players[i], players[j], players[j]);
 
                 assertThat(game.getFirstPlayer()).isEqualTo(players[i]);
                 assertThat(game.getTokenFor(players[j])).isEqualTo(Token.X);
@@ -67,48 +67,48 @@ public class GameTest {
     public void winLineLength_GreaterThanBoardLength() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Win Line Length cannot be greater than Board Length or there would be no way to win!");
-        new Game(BOARD_LENGTH, BOARD_LENGTH + 1, players, players[0], players[1]);
+        new Game(BOARD_LENGTH, BOARD_LENGTH + 1, players[0], players[1], players[1]);
     }
 
     @Test
     public void boardLength_TooSmall() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Board Length must be greater than 3 or the game would be too easy!");
-        new Game(TOO_SMALL_BOARD_LENGTH, TOO_SMALL_BOARD_LENGTH, players, players[0], players[1]);
+        new Game(TOO_SMALL_BOARD_LENGTH, TOO_SMALL_BOARD_LENGTH, players[0], players[1], players[1]);
     }
 
     @Test
     public void winLineLength_TooSmall() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Win Line Length must be greater than 3 or the game would be too easy!");
-        new Game(BOARD_LENGTH, TOO_SMALL_WIN_LINE_LENGTH, players, players[0], players[1]);
+        new Game(BOARD_LENGTH, TOO_SMALL_WIN_LINE_LENGTH, players[0], players[1], players[1]);
     }
 
     @Test
     public void players_TooFew() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Each TicTacToe game must have exactly 2 players!");
-        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players1, players1[0], players1[0]);
+        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players1[0], players1[0], players1[0]);
     }
 
     @Test
     public void players_TooMany() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Each TicTacToe game must have exactly 2 players!");
-        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players3, players3[0], players3[1]);
+        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players3[0], players3[1], players3[1]);
     }
 
     @Test
     public void firstPlayer_Outsider() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("First Player and Player X must be players actually playing the game!");
-        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, outsider, players[0]);
+        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players[0], outsider, players[0]);
     }
 
     @Test
     public void playerX_Outsider() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("First Player and Player X must be players actually playing the game!");
-        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players, players[0], outsider);
+        new Game(BOARD_LENGTH, WIN_LINE_LENGTH, players[0], players[0], outsider);
     }
 }

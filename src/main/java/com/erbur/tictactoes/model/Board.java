@@ -2,16 +2,12 @@ package com.erbur.tictactoes.model;
 
 import com.erbur.tictactoes.model.enums.Token;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Embeddable;
 
 @Data
 @Embeddable
-@Getter
-@Setter
 @NoArgsConstructor
 public class Board {
     //[row][column]

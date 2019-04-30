@@ -68,4 +68,9 @@ public class PlayerRestController {
     public void deletePlayer(@PathVariable long id) {
         playerRepository.deleteById(id);
     }
+
+//    @GetMapping("/player-stats/{id}")
+//    public void getPlayerStats() {
+//
+//    }
 }
