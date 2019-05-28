@@ -80,7 +80,7 @@ public class GameRestController {
         return new GameStatusDTO(game.get());
     }
 
-    static class GameNotFoundException extends Throwable {
+    static class GameNotFoundException extends Exception {
         public GameNotFoundException(String s) {
             super(s);
         }

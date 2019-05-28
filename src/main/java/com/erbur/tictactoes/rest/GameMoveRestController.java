@@ -95,7 +95,7 @@ public class GameMoveRestController {
         return new GameMoveDTO(gameMove.get());
     }
 
-    static class GameMoveNotFoundException extends Throwable {
+    static class GameMoveNotFoundException extends Exception {
         public GameMoveNotFoundException(String s) {
             super(s);
         }

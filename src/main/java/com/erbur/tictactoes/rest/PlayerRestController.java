@@ -43,7 +43,7 @@ public class PlayerRestController {
         return player.get();
     }
 
-    static class PlayerNotFoundException extends Throwable {
+    static class PlayerNotFoundException extends Exception {
         public PlayerNotFoundException(String s) {
             super(s);
         }

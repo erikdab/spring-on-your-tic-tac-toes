@@ -3,4 +3,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'tic-tac-toes'
+rootProject.name ='ultimate_tic_tac_toe'

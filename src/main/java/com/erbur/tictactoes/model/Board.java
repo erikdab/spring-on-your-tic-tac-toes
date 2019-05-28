@@ -40,6 +40,10 @@ public class Board {
         return fieldsChar;
     }
 
+    public Token[][] getFields() {
+        return this.fields.clone();
+    }
+
     public void setFields(Token[][] fields) {
         int width = fields[0].length;
         int height = fields.length;
@@ -47,7 +51,13 @@ public class Board {
         if (width != size.getWidth() || height != size.getHeight())
             throw new IllegalArgumentException("Passed Field Board Size.");
 
-        this.fields = fields;
+        this.fields = new Token[size.getHeight()][size.getWidth()];
+
+        for (int x = 0; x < fields.length; x++) {
+            for (int y = 0; y < fields[x].length; y++) {
+                this.fields[y][x] = fields[y][x];
+            }
+        }
     }
 
     public Token getField(Point location) {
