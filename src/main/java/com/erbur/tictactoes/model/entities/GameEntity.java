@@ -1,5 +1,6 @@
-package com.erbur.tictactoes.model;
+package com.erbur.tictactoes.model.entities;
 
+import com.erbur.tictactoes.model.Point;
 import com.erbur.tictactoes.model.enums.Token;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,28 +13,28 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Table(name = "game")
-public class Game {
+public class GameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Transient
-    private transient Board board = null;
+    private transient BoardEntity board = null;
 
     @Transient
-    public Board boardGet() {
+    public BoardEntity boardGet() {
         if (board == null) setupBoard();
         return board;
     }
 
     private void setupBoard() {
-        board = new Board(boardLength, boardLength);
-        for (GameMove gameMove : gameMoves) {
+        board = new BoardEntity(boardLength, boardLength);
+        for (GameMoveEntity gameMove : gameMoves) {
             addMove(gameMove.position, gameMove.player);
         }
     }
 
-    // Should these be placed in board or maybe create a Game class (only data - service here)
+    // Should these be placed in board or maybe create a GameEntity class (only data - service here)
     private boolean boardWon = false;
     private boolean boardDraw = false;
     private transient int moveCount = 0;
@@ -41,11 +42,11 @@ public class Game {
 
     @ManyToOne
     @JoinColumn
-    private Player firstPlayer;
+    private PlayerEntity firstPlayer;
     private Token firstPlayerToken;
     @ManyToOne
     @JoinColumn
-    private Player secondPlayer;
+    private PlayerEntity secondPlayer;
     private Token secondPlayerToken;
 
     @NotNull
@@ -54,27 +55,27 @@ public class Game {
     private int winLineLength;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
-    private List<GameMove> gameMoves;
+    private List<GameMoveEntity> gameMoves;
 
     // Another constructor with board?
-    public Game(int boardLength, int winLineLength, Player firstPlayer, Player secondPlayer, Player playerX) {
+    public GameEntity(int boardLength, int winLineLength, PlayerEntity firstPlayer, PlayerEntity secondPlayer, PlayerEntity playerX) {
         if (boardLength < 3)
-            throw new IllegalArgumentException("Board Length must be greater than 3 or the game would be too easy!");
+            throw new IllegalArgumentException("BoardEntity Length must be greater than 3 or the game would be too easy!");
 
         if (winLineLength > boardLength)
-            throw new IllegalArgumentException("Win Line Length cannot be greater than Board Length or there would be no way to win!");
+            throw new IllegalArgumentException("Win Line Length cannot be greater than BoardEntity Length or there would be no way to win!");
         else if (winLineLength < 3)
             throw new IllegalArgumentException("Win Line Length must be greater than 3 or the game would be too easy!");
 
         this.boardLength = boardLength;
-        this.board = new Board(boardLength, boardLength);
+        this.board = new BoardEntity(boardLength, boardLength);
         this.winLineLength = winLineLength;
 
         if (firstPlayer == secondPlayer) {
-            throw new IllegalArgumentException("First Player and Second Player must be different!");
+            throw new IllegalArgumentException("First PlayerEntity and Second PlayerEntity must be different!");
         }
         if (firstPlayer != playerX && secondPlayer != playerX) {
-            throw new IllegalArgumentException("Player X must be First or Second Player!");
+            throw new IllegalArgumentException("PlayerEntity X must be First or Second PlayerEntity!");
         }
 
         this.firstPlayer = firstPlayer;
@@ -84,7 +85,7 @@ public class Game {
         secondPlayerToken = firstPlayerToken == Token.X ? Token.O : Token.X;
     }
 
-    public void setGameMoves(List<GameMove> gameMoves) {
+    public void setGameMoves(List<GameMoveEntity> gameMoves) {
         this.gameMoves = gameMoves;
         setupBoard();
     }
@@ -99,7 +100,7 @@ public class Game {
         }
     }
 
-    public void setWinner(Player player) {
+    public void setWinner(PlayerEntity player) {
         setWinnerToken(getTokenFor(player));
     }
 
@@ -108,36 +109,36 @@ public class Game {
         this.boardWon = true;
     }
 
-    public Player getWinner() {
+    public PlayerEntity getWinner() {
         if(! this.boardWon) return null;
         return getPlayerFor(winnerToken);
     }
 
-    public Player getOtherPlayer(Player player) {
+    public PlayerEntity getOtherPlayer(PlayerEntity player) {
         return firstPlayer == player ? firstPlayer : secondPlayer;
     }
 
-    public void addMove(Point move, Player player) {
+    public void addMove(Point move, PlayerEntity player) {
         if (isBoardDraw() || isBoardWon())
             throw new IllegalArgumentException("This game is completed, start a new game to continue playing.");
-        Player currentPlayer = getCurrentPlayer();
+        PlayerEntity currentPlayer = getCurrentPlayer();
         if (player != currentPlayer) throw new IllegalArgumentException(
-                String.format("Player %s (%s) cannot play now since it is player %s's (%s) turn.",
+                String.format("PlayerEntity %s (%s) cannot play now since it is player %s's (%s) turn.",
                         player, getTokenFor(player).toChar(), currentPlayer, getTokenFor(currentPlayer)));
         if (move.outside(boardGet().getSize())) throw new IllegalArgumentException("Move is outside box!");
         boardGet().setField(move, getTokenFor(player));
         moveCount++;
     }
 
-    public Token getTokenFor(Player player) {
+    public Token getTokenFor(PlayerEntity player) {
         return player == firstPlayer ? firstPlayerToken : secondPlayerToken;
     }
 
-    public Player getPlayerFor(Token token) {
+    public PlayerEntity getPlayerFor(Token token) {
         return firstPlayerToken == token ? firstPlayer : secondPlayer;
     }
 
-    public Player getCurrentPlayer() {
+    public PlayerEntity getCurrentPlayer() {
         return moveCount % 2 == 0 ? firstPlayer : secondPlayer;
     }
 

@@ -1,7 +1,7 @@
 package com.erbur.tictactoes.model.dto;
 
-import com.erbur.tictactoes.model.Game;
-import com.erbur.tictactoes.model.GameMove;
+import com.erbur.tictactoes.model.entities.GameEntity;
+import com.erbur.tictactoes.model.entities.GameMoveEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +22,7 @@ public class GameStatusDTO {
 
     private List<GameMoveDTO> gameMoves;
 
-    public GameStatusDTO(Game game) {
+    public GameStatusDTO(GameEntity game) {
         this.setWon(game.isBoardWon());
         this.setDraw(game.isBoardDraw());
         if (isWon()) {
@@ -32,7 +32,7 @@ public class GameStatusDTO {
         this.setMoveCount(game.getMoveCount());
         this.setBoard(new BoardDTO(game.boardGet()));
         List<GameMoveDTO> gameMoveDTOS = new ArrayList<>();
-        for (GameMove gameMove : game.getGameMoves()) {
+        for (GameMoveEntity gameMove : game.getGameMoves()) {
             gameMoveDTOS.add(new GameMoveDTO(gameMove));
         }
         this.setGameMoves(gameMoveDTOS);

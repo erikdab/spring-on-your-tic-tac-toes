@@ -1,6 +1,6 @@
 package com.erbur.tictactoes.model.dto;
 
-import com.erbur.tictactoes.model.Player;
+import com.erbur.tictactoes.model.entities.PlayerEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class PlayerDTO {
     private String name;
 
-    public PlayerDTO(Player player) {
+    public PlayerDTO(PlayerEntity player) {
         this.name = player.getName();
     }
 }

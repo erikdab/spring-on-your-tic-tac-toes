@@ -1,6 +1,6 @@
 package com.erbur.tictactoes.model.dto;
 
-import com.erbur.tictactoes.model.Board;
+import com.erbur.tictactoes.model.entities.BoardEntity;
 import com.erbur.tictactoes.model.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public class BoardDTO {
         return this.fields.clone();
     }
 
-    public BoardDTO(Board board) {
+    public BoardDTO(BoardEntity board) {
         this.fields = board.getFieldsChar();
         this.size = board.getSize();
     }

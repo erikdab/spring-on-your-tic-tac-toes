@@ -1,6 +1,6 @@
 package com.erbur.tictactoes.model.dto;
 
-import com.erbur.tictactoes.model.GameMove;
+import com.erbur.tictactoes.model.entities.GameMoveEntity;
 import com.erbur.tictactoes.model.Point;
 import com.erbur.tictactoes.model.enums.Token;
 import lombok.Data;
@@ -13,7 +13,7 @@ public class GameMoveDTO {
     Point position;
     Token playerToken;
 
-    public GameMoveDTO(GameMove gameMove) {
+    public GameMoveDTO(GameMoveEntity gameMove) {
         gameId = gameMove.getGame().getId();
         position = gameMove.getPosition();
         playerToken = gameMove.getGame().getTokenFor(gameMove.getPlayer());

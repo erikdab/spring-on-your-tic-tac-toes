@@ -1,6 +1,6 @@
 package com.erbur.tictactoes.rest;
 
-import com.erbur.tictactoes.model.Player;
+import com.erbur.tictactoes.model.entities.PlayerEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,8 +19,8 @@ public class PlayerRestController {
     }
 
     @PostMapping("/players")
-    public ResponseEntity<Object> createPlayer(@RequestBody Player player) {
-        Player savedPlayer = playerRepository.save(player);
+    public ResponseEntity<Object> createPlayer(@RequestBody PlayerEntity player) {
+        PlayerEntity savedPlayer = playerRepository.save(player);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedPlayer.getId()).toUri();
@@ -29,13 +29,13 @@ public class PlayerRestController {
     }
 
     @GetMapping("/players")
-    public List<Player> retrieveAllPlayers() {
+    public List<PlayerEntity> retrieveAllPlayers() {
         return playerRepository.findAll();
     }
 
     @GetMapping("/players/{id}")
-    public Player retrievePlayer(@PathVariable long id) throws PlayerNotFoundException {
-        Optional<Player> player = playerRepository.findById(id);
+    public PlayerEntity retrievePlayer(@PathVariable long id) throws PlayerNotFoundException {
+        Optional<PlayerEntity> player = playerRepository.findById(id);
 
         if (!player.isPresent())
             throw new PlayerNotFoundException("id-" + id);
@@ -50,9 +50,9 @@ public class PlayerRestController {
     }
 
     @PutMapping("/players/{id}")
-    public ResponseEntity<Object> updatePlayer(@RequestBody Player player, @PathVariable long id) {
+    public ResponseEntity<Object> updatePlayer(@RequestBody PlayerEntity player, @PathVariable long id) {
 
-        Optional<Player> playerOptional = playerRepository.findById(id);
+        Optional<PlayerEntity> playerOptional = playerRepository.findById(id);
 
         if (!playerOptional.isPresent())
             return ResponseEntity.notFound().build();

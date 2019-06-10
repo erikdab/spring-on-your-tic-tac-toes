@@ -1,5 +1,7 @@
-package com.erbur.tictactoes.model;
+package com.erbur.tictactoes.model.entities;
 
+import com.erbur.tictactoes.model.Point;
+import com.erbur.tictactoes.model.Size;
 import com.erbur.tictactoes.model.enums.Token;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,13 +11,13 @@ import javax.persistence.Embeddable;
 @Data
 @Embeddable
 @NoArgsConstructor
-public class Board {
+public class BoardEntity {
     //[row][column]
     private Token[][] fields;
 
     private Size size;
 
-    public Board(int width, int height) {
+    public BoardEntity(int width, int height) {
         size = new Size(width, height);
 
         resetBoard();
@@ -49,7 +51,7 @@ public class Board {
         int height = fields.length;
 
         if (width != size.getWidth() || height != size.getHeight())
-            throw new IllegalArgumentException("Passed Field Board Size.");
+            throw new IllegalArgumentException("Passed Field BoardEntity Size.");
 
         this.fields = new Token[size.getHeight()][size.getWidth()];
 
@@ -75,7 +77,7 @@ public class Board {
 
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append(String.format("Board %s", size));
+        result.append(String.format("BoardEntity %s", size));
         for (int x = 0; x < size.getWidth(); x++) {
             for (int y = 0; y < size.getHeight(); y++) {
                 result.append(fields[y][x]);

@@ -1,5 +1,6 @@
-package com.erbur.tictactoes.model;
+package com.erbur.tictactoes.model.entities;
 
+import com.erbur.tictactoes.model.Point;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor
 @Table(name = "game_move")
-public class GameMove {
+public class GameMoveEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,9 +24,9 @@ public class GameMove {
 
     @ManyToOne
     @JoinColumn
-    Player player;
+    PlayerEntity player;
 
     @ManyToOne
     @JoinColumn
-    Game game;
+    GameEntity game;
 }

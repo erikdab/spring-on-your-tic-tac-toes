@@ -1,14 +1,18 @@
 package com.erbur.tictactoes.service;
 
+import com.erbur.tictactoes.interfaces.GameInterface;
 import com.erbur.tictactoes.model.*;
+import com.erbur.tictactoes.model.entities.BoardEntity;
+import com.erbur.tictactoes.model.entities.GameEntity;
+import com.erbur.tictactoes.model.entities.PlayerEntity;
 import com.erbur.tictactoes.model.enums.Token;
 import org.springframework.stereotype.Service;
 
 @Service()
-public class TicTacToesGameService {
-    private Game game;
+public class TicTacToesGameService implements GameInterface {
+    private GameEntity game;
 
-    // Other things to consider: history, maybe put check victory condition in Board (maybe not)
+    // Other things to consider: history, maybe put check victory condition in BoardEntity (maybe not)
 
     public TicTacToesGameService() {
     }
@@ -17,22 +21,22 @@ public class TicTacToesGameService {
     public void newGame(int boardLength, int winLineLength) {
         // These could be in the database
         // They can have statistics of how many victories / etc.
-        Player[] players = new Player[]{new Player("Frank"), new Player("Erik")};
+        PlayerEntity[] players = new PlayerEntity[]{new PlayerEntity("Frank"), new PlayerEntity("Erik")};
 
-        game = new Game(boardLength, winLineLength, players[0], players[1], players[1]);
+        game = new GameEntity(boardLength, winLineLength, players[0], players[1], players[1]);
     }
 
-    public void setGame(Game game) {
+    public void setGame(GameEntity game) {
         this.game = game;
     }
 
-    public void makeMove(Point point, Player player) {
+    public void makeMove(Point point, PlayerEntity player) {
         game.addMove(point, player);
 
         checkVictoryConditionAfterMove(point, player);
     }
 
-    public Game getGame() {
+    public GameEntity getGame() {
         return game;
     }
 
@@ -40,7 +44,7 @@ public class TicTacToesGameService {
     private boolean checkWinHorizontal(Point move, Token token, boolean horizontal) {
         int x = move.getX();
         int y = move.getY();
-        Board board = game.boardGet();
+        BoardEntity board = game.boardGet();
         int boardLength = game.getBoardLength();
         int winLineLength = game.getWinLineLength();
 
@@ -71,7 +75,7 @@ public class TicTacToesGameService {
     private boolean checkWinDiagonal(Point move, Token token, boolean diagonal) {
         if (!legalDiagonal(move, diagonal)) return false;
 
-        Board board = game.boardGet();
+        BoardEntity board = game.boardGet();
         Size boardSize = board.getSize();
         int winLineLength = game.getWinLineLength();
 
@@ -106,7 +110,7 @@ public class TicTacToesGameService {
 
     // I could easily make this work for checking victory condition whenever,
     // not just after a move (but rather checking if the board is won simply, and by whom).
-    private void checkVictoryConditionAfterMove(Point move, Player player) {
+    private void checkVictoryConditionAfterMove(Point move, PlayerEntity player) {
         Token token = game.getTokenFor(player);
 
         // check column - horizontal

@@ -1,6 +1,6 @@
 package com.erbur.tictactoes.model.dto;
 
-import com.erbur.tictactoes.model.Game;
+import com.erbur.tictactoes.model.entities.GameEntity;
 import com.erbur.tictactoes.model.enums.Token;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class GameDTO {
     private int boardLength;
     private int winLineLength;
 
-    public GameDTO(Game game) {
+    public GameDTO(GameEntity game) {
         this.setFirstPlayerId(game.getFirstPlayer().getId());
         this.setSecondPlayerId(game.getSecondPlayer().getId());
         this.setFirstPlayerToken(game.getFirstPlayerToken());

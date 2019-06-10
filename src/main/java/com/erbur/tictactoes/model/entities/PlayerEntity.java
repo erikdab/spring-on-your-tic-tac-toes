@@ -1,4 +1,4 @@
-package com.erbur.tictactoes.model;
+package com.erbur.tictactoes.model.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor
 @Table(name = "player")
-public class Player {
+public class PlayerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +18,7 @@ public class Player {
     @NotNull
     private String name;
 
-    public Player(String name) {
+    public PlayerEntity(String name) {
         this.name = name;
     }
 
