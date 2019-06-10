@@ -1,6 +1,5 @@
 package com.erbur.tictactoes.rest;
 
-import com.erbur.tictactoes.interfaces.GameInterface;
 import com.erbur.tictactoes.model.entities.GameEntity;
 import com.erbur.tictactoes.model.entities.PlayerEntity;
 import com.erbur.tictactoes.model.dto.GameDTO;
@@ -8,7 +7,6 @@ import com.erbur.tictactoes.model.dto.GameStatusDTO;
 import com.erbur.tictactoes.model.enums.Token;
 import com.erbur.tictactoes.repository.GameRepository;
 import com.erbur.tictactoes.repository.PlayerRepository;
-import com.erbur.tictactoes.service.TicTacToesGameService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -73,21 +71,6 @@ public class GameRestController {
         public GameNotFoundException(String s) {
             super(s);
         }
-    }
-
-    @PutMapping("/games/{id}")
-    public ResponseEntity<Object> updateGame(@RequestBody GameEntity game, @PathVariable long id) {
-
-        Optional<GameEntity> gameOptional = gameRepository.findById(id);
-
-        if (!gameOptional.isPresent())
-            return ResponseEntity.notFound().build();
-
-        game.setId(id);
-
-        gameRepository.save(game);
-
-        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/games/{id}")

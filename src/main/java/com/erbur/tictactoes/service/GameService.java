@@ -8,13 +8,13 @@ import com.erbur.tictactoes.model.entities.PlayerEntity;
 import com.erbur.tictactoes.model.enums.Token;
 import org.springframework.stereotype.Service;
 
-@Service()
-public class TicTacToesGameService implements GameInterface {
+@Service
+public class GameService implements GameInterface {
     private GameEntity game;
 
     // Other things to consider: history, maybe put check victory condition in BoardEntity (maybe not)
 
-    public TicTacToesGameService() {
+    public GameService() {
     }
 
     // Pass more params in new game.

@@ -7,8 +7,6 @@ import com.erbur.tictactoes.model.entities.PlayerEntity;
 import com.erbur.tictactoes.model.dto.GameMoveDTO;
 import com.erbur.tictactoes.repository.GameMoveRepository;
 import com.erbur.tictactoes.repository.GameRepository;
-import com.erbur.tictactoes.service.TicTacToesGameService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,12 +17,12 @@ import java.util.Optional;
 
 @RestController
 public class GameMoveRestController {
-    private GameInterface ticTacToesGameService;
+    private GameInterface gameService;
     private final GameMoveRepository gameMoveRepository;
     private final GameRepository gameRepository;
 
-    public GameMoveRestController(GameInterface ticTacToesGameService, GameMoveRepository gameMoveRepository, GameRepository gameRepository) {
-        this.ticTacToesGameService = ticTacToesGameService;
+    public GameMoveRestController(GameInterface gameService, GameMoveRepository gameMoveRepository, GameRepository gameRepository) {
+        this.gameService = gameService;
         this.gameMoveRepository = gameMoveRepository;
         this.gameRepository = gameRepository;
     }
@@ -36,7 +34,7 @@ public class GameMoveRestController {
             throw new GameRestController.GameNotFoundException("id-" + gameMoveDTO.getGameId());
         }
         GameEntity game = gameOptional.get();
-        ticTacToesGameService.setGame(game);
+        gameService.setGame(game);
 
         // First Move
         int moveNumber = 0;
@@ -55,7 +53,7 @@ public class GameMoveRestController {
         gameMove.setPlayer(player);
         gameMove.setPosition(gameMoveDTO.getPosition());
 
-        ticTacToesGameService.makeMove(gameMove.getPosition(), gameMove.getPlayer());
+        gameService.makeMove(gameMove.getPosition(), gameMove.getPlayer());
 
         gameRepository.save(game);
         GameMoveEntity savedGameMove = gameMoveRepository.save(gameMove);
@@ -80,21 +78,6 @@ public class GameMoveRestController {
         public GameMoveNotFoundException(String s) {
             super(s);
         }
-    }
-
-    @PutMapping("/game-moves/{id}")
-    public ResponseEntity<Object> updateGameMove(@RequestBody GameMoveEntity gameMove, @PathVariable long id) {
-
-        Optional<GameMoveEntity> studentOptional = gameMoveRepository.findById(id);
-
-        if (!studentOptional.isPresent())
-            return ResponseEntity.notFound().build();
-
-        gameMove.setId(id);
-
-        gameMoveRepository.save(gameMove);
-
-        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/game-moves/{id}")

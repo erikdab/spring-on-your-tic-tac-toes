@@ -1,7 +1,7 @@
 package com.erbur.tictactoes.unit;
 
 import com.erbur.tictactoes.model.entities.PlayerEntity;
-import com.erbur.tictactoes.service.TicTacToesGameService;
+import com.erbur.tictactoes.service.GameService;
 import com.erbur.tictactoes.model.entities.GameEntity;
 import com.erbur.tictactoes.model.Point;
 import com.erbur.tictactoes.model.enums.Token;
@@ -38,7 +38,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void newGame_BoardAndWinLength() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
@@ -50,7 +50,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_Valid() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
@@ -64,7 +64,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_OutsideBox_ExceptionThrown() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
@@ -80,7 +80,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_OverANonBlank_ExceptionThrown() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
@@ -96,7 +96,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_WinPlayerXDiagonal() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -112,7 +112,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_WinPlayerXAntiDiagonal() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -128,7 +128,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_WinPlayerOHorizontal() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -149,7 +149,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_NotCurrentPlayer() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -164,7 +164,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_WinPlayerOVertical() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -185,7 +185,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_DrawPlayerO() {
-        TicTacToesGameService ticTacToesGameService = new TicTacToesGameService();
+        GameService ticTacToesGameService = new GameService();
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();

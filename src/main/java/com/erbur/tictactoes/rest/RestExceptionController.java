@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 @Slf4j
-public class TicTacToesExceptionController {
+public class RestExceptionController {
     @ExceptionHandler(GameRestController.GameNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void gameNotFoundException(Exception ex) {
