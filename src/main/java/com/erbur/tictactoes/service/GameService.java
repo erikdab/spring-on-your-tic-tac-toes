@@ -43,7 +43,7 @@ public class GameService implements GameServiceInterface {
             throw new PlayerNotFoundException("Second player not found id-" + secondPlayerId);
         }
         PlayerEntity playerX = firstPlayerToken == Token.X ? firstPlayer.get() : secondPlayer.get();
-        GameEntity game = new GameEntity(boardLength, winLineLength, firstPlayer.get(), secondPlayer.get(), playerX);
+        game = new GameEntity(boardLength, winLineLength, firstPlayer.get(), secondPlayer.get(), playerX);
         return gameRepository.save(game);
     }
 
@@ -57,7 +57,8 @@ public class GameService implements GameServiceInterface {
         if (!game.isPresent())
             throw new GameNotFoundException("id-" + id);
 
-        return game.get();
+        this.game = game.get();
+        return this.game;
     }
 
     public void delete(Long id) {

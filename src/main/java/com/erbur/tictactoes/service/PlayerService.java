@@ -22,10 +22,6 @@ public class PlayerService implements PlayerServiceInterface {
         return playerRepository.save(playerEntity);
     }
 
-    public void updateOne(PlayerEntity playerEntity) {
-
-    }
-
     @Override
     public PlayerEntity findOne(Long id) throws PlayerNotFoundException {
         Optional<PlayerEntity> player = playerRepository.findById(id);
