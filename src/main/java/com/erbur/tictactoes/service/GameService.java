@@ -1,20 +1,94 @@
 package com.erbur.tictactoes.service;
 
-import com.erbur.tictactoes.interfaces.GameInterface;
-import com.erbur.tictactoes.model.*;
+import com.erbur.tictactoes.exceptions.GameNotFoundException;
+import com.erbur.tictactoes.exceptions.PlayerNotFoundException;
+import com.erbur.tictactoes.interfaces.GameServiceInterface;
+import com.erbur.tictactoes.model.Point;
+import com.erbur.tictactoes.model.Size;
 import com.erbur.tictactoes.model.entities.BoardEntity;
 import com.erbur.tictactoes.model.entities.GameEntity;
+import com.erbur.tictactoes.model.entities.GameMoveEntity;
 import com.erbur.tictactoes.model.entities.PlayerEntity;
 import com.erbur.tictactoes.model.enums.Token;
+import com.erbur.tictactoes.repository.GameMoveRepository;
+import com.erbur.tictactoes.repository.GameRepository;
+import com.erbur.tictactoes.repository.PlayerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
-public class GameService implements GameInterface {
+public class GameService implements GameServiceInterface {
+    private final GameRepository gameRepository;
+    private final GameMoveRepository gameMoveRepository;
+    private final PlayerRepository playerRepository;
     private GameEntity game;
 
     // Other things to consider: history, maybe put check victory condition in BoardEntity (maybe not)
 
-    public GameService() {
+    public GameService(GameRepository gameRepository, GameMoveRepository gameMoveRepository, PlayerRepository playerRepository) {
+        this.gameRepository = gameRepository;
+        this.gameMoveRepository = gameMoveRepository;
+        this.playerRepository = playerRepository;
+    }
+
+    public GameEntity newGame2(Long firstPlayerId, Long secondPlayerId, Token firstPlayerToken, int boardLength, int winLineLength) throws PlayerNotFoundException {
+        Optional<PlayerEntity> firstPlayer = playerRepository.findById(firstPlayerId);
+        Optional<PlayerEntity> secondPlayer = playerRepository.findById(secondPlayerId);
+        if (! firstPlayer.isPresent()) {
+            throw new PlayerNotFoundException("First player not found id-" + firstPlayerId);
+        }
+        if (! secondPlayer.isPresent()) {
+            throw new PlayerNotFoundException("Second player not found id-" + secondPlayerId);
+        }
+        PlayerEntity playerX = firstPlayerToken == Token.X ? firstPlayer.get() : secondPlayer.get();
+        GameEntity game = new GameEntity(boardLength, winLineLength, firstPlayer.get(), secondPlayer.get(), playerX);
+        return gameRepository.save(game);
+    }
+
+    public List<GameEntity> findAll() {
+        return gameRepository.findAll();
+    }
+
+    public GameEntity findOne(Long id) throws GameNotFoundException {
+        Optional<GameEntity> game = gameRepository.findById(id);
+
+        if (!game.isPresent())
+            throw new GameNotFoundException("id-" + id);
+
+        return game.get();
+    }
+
+    public void delete(Long id) {
+        gameRepository.deleteById(id);
+    }
+
+    public GameMoveEntity makeMove(Point position) {
+        // First Move
+        int moveNumber = 0;
+        PlayerEntity player = game.getFirstPlayer();
+        List<GameMoveEntity> gameMoves = gameMoveRepository.findAll();
+        // n-th Move
+        if (! gameMoves.isEmpty()) {
+            moveNumber = gameMoves.get(gameMoves.size()-1).getMoveNumber()+1;
+            PlayerEntity lastPlayer = gameMoves.get(gameMoves.size()-1).getPlayer();
+            player = game.getOtherPlayer(lastPlayer);
+        }
+
+        GameMoveEntity gameMove = new GameMoveEntity();
+        gameMove.setGame(game);
+        gameMove.setMoveNumber(moveNumber);
+        gameMove.setPlayer(player);
+        gameMove.setPosition(position);
+
+        game.addMove(position, player);
+
+        checkVictoryConditionAfterMove(position, player);
+
+        gameRepository.save(game);
+
+        return gameMoveRepository.save(gameMove);
     }
 
     // Pass more params in new game.
@@ -28,6 +102,15 @@ public class GameService implements GameInterface {
 
     public void setGame(GameEntity game) {
         this.game = game;
+    }
+
+    public void setGame(Long gameId) throws GameNotFoundException {
+        Optional<GameEntity> gameOptional = gameRepository.findById(gameId);
+        if (! gameOptional.isPresent()) {
+            throw new GameNotFoundException("id-" + gameId);
+        }
+        GameEntity game = gameOptional.get();
+        setGame(game);
     }
 
     public void makeMove(Point point, PlayerEntity player) {

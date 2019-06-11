@@ -38,7 +38,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void newGame_BoardAndWinLength() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
@@ -50,7 +50,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_Valid() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
@@ -64,7 +64,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_OutsideBox_ExceptionThrown() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
@@ -80,7 +80,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_OverANonBlank_ExceptionThrown() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
 
@@ -96,7 +96,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_WinPlayerXDiagonal() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -112,7 +112,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_WinPlayerXAntiDiagonal() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -128,7 +128,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_WinPlayerOHorizontal() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -149,7 +149,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_NotCurrentPlayer() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -164,7 +164,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_WinPlayerOVertical() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
@@ -185,7 +185,7 @@ public class TicTacToesGameServiceTest {
 
     @Test
     public void makeMove_DrawPlayerO() {
-        GameService ticTacToesGameService = new GameService();
+        GameService ticTacToesGameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         ticTacToesGameService.newGame(BOARD_LENGTH, WIN_LINE_LENGTH);
         GameEntity game = ticTacToesGameService.getGame();
