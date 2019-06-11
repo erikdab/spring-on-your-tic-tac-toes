@@ -45,25 +45,6 @@ public class GameTest {
     }
 
     @Test
-    public void newGame_ValidPlayerAssignments() {
-        GameEntity game = new GameEntity(BOARD_LENGTH, WIN_LINE_LENGTH, players[0], players[1], players[1]);
-
-        // Verify that the players were properly set:
-        assertThat(game.getFirstPlayer()).isEqualTo(players[0]);
-        assertThat(game.getSecondPlayer()).isEqualTo(players[1]);
-
-        // Verify that the first player / playerX is properly set:
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; i < 2; i++) {
-                game = new GameEntity(BOARD_LENGTH, WIN_LINE_LENGTH, players[i], players[j], players[j]);
-
-                assertThat(game.getFirstPlayer()).isEqualTo(players[i]);
-                assertThat(game.getTokenFor(players[j])).isEqualTo(Token.X);
-            }
-        }
-    }
-
-    @Test
     public void winLineLength_GreaterThanBoardLength() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Win Line Length cannot be greater than BoardEntity Length or there would be no way to win!");
@@ -87,28 +68,14 @@ public class GameTest {
     @Test
     public void players_TooFew() {
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Each TicTacToe game must have exactly 2 players!");
+        thrown.expectMessage("First PlayerEntity and Second PlayerEntity must be different!");
         new GameEntity(BOARD_LENGTH, WIN_LINE_LENGTH, players1[0], players1[0], players1[0]);
     }
 
     @Test
-    public void players_TooMany() {
+    public void player_Outsider() {
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Each TicTacToe game must have exactly 2 players!");
-        new GameEntity(BOARD_LENGTH, WIN_LINE_LENGTH, players3[0], players3[1], players3[1]);
-    }
-
-    @Test
-    public void firstPlayer_Outsider() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("First PlayerEntity and PlayerEntity X must be players actually playing the game!");
-        new GameEntity(BOARD_LENGTH, WIN_LINE_LENGTH, players[0], outsider, players[0]);
-    }
-
-    @Test
-    public void playerX_Outsider() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("First PlayerEntity and PlayerEntity X must be players actually playing the game!");
-        new GameEntity(BOARD_LENGTH, WIN_LINE_LENGTH, players[0], players[0], outsider);
+        thrown.expectMessage("PlayerEntity X must be First or Second PlayerEntity!");
+        new GameEntity(BOARD_LENGTH, WIN_LINE_LENGTH, players[0], outsider, players[1]);
     }
 }

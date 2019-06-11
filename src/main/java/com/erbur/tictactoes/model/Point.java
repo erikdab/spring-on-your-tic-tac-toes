@@ -23,18 +23,8 @@ public class Point {
     }
 
     // At 0 on x or y-axis
-    public boolean atZeroAxis(Size box) {
+    public boolean atZeroAxis() {
         return x == 0 || y == 0;
-    }
-
-    // At 0 on x or y-axis
-    public boolean atBorders(Size box) {
-        return x == 0 || y == 0 || x == box.getWidth() - 1 || y == box.getHeight() - 1;
-    }
-
-    // Not equals - this doesn't check if its the same object, but if they are similar.
-    public boolean compareTo(Point otherPoint) {
-        return this.x == otherPoint.x && this.y == otherPoint.y;
     }
 
     public boolean outside(Size box) {

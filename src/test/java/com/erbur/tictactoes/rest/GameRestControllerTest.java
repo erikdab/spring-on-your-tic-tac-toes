@@ -1,120 +1,142 @@
 package com.erbur.tictactoes.rest;
 
 import com.erbur.tictactoes.TicTacToesApplication;
+import com.erbur.tictactoes.interfaces.GameServiceInterface;
+import com.erbur.tictactoes.model.Point;
 import com.erbur.tictactoes.model.dto.GameDTO;
+import com.erbur.tictactoes.model.dto.GameMoveDTO;
 import com.erbur.tictactoes.model.dto.GameStatusDTO;
+import com.erbur.tictactoes.model.entities.GameEntity;
+import com.erbur.tictactoes.model.entities.PlayerEntity;
+import com.erbur.tictactoes.model.enums.Token;
+import com.erbur.tictactoes.repository.GameMoveRepository;
+import com.erbur.tictactoes.repository.GameRepository;
+import com.erbur.tictactoes.repository.PlayerRepository;
+import com.erbur.tictactoes.service.GameService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.client.ExpectedCount;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TicTacToesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = TicTacToesApplication.class)
 @ActiveProfiles("test")
 public class GameRestControllerTest {
-    @LocalServerPort
-    private int port;
 
-    TestRestTemplate restTemplate = new TestRestTemplate();
+    @Autowired
+    RestTemplate restTemplate;
 
-    HttpHeaders headers = new HttpHeaders();
+    @Autowired
+    private GameServiceInterface gameService;
 
-    UriComponentsBuilder newGameUriBuilder;
-    UriComponentsBuilder makeMoveO1UriBuilder;
-    UriComponentsBuilder makeMoveX1UriBuilder;
+    private MockRestServiceServer mockServer;
+    private ObjectMapper mapper = new ObjectMapper();
+
 
     @Before
     public void setupTests() {
-        newGameUriBuilder = UriComponentsBuilder.fromHttpUrl(createURLWithPort("/games/"))
-                .queryParam("boardLength", 9)
-                .queryParam("winLineLength", 4);
+//        GameEntity gameEntity = new GameEntity();
+//
+//        Optional<GameEntity> optGameEntity = Optional.of(gameEntity);
+//
+//        GameRepository gameRepository = Mockito.mock(GameRepository.class);
+//        Mockito.when(gameRepository.findById(1L)).thenReturn(optGameEntity);
+//
+//        GameMoveRepository gameMoveRepository = Mockito.mock(GameMoveRepository.class);
+//
+//        PlayerEntity player1 = new PlayerEntity();
+//        player1.setName("Erik");
+//
+//        PlayerEntity player2 = new PlayerEntity();
+//        player2.setName("Jonathan");
+//
+//        PlayerRepository playerRepository = Mockito.mock(PlayerRepository.class);
+//
+//        Mockito.when(playerRepository.findById(1L)).thenReturn(Optional.of(player1));
+//        Mockito.when(playerRepository.findById(2L)).thenReturn(Optional.of(player2));
+//
+//        gameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
-        makeMoveO1UriBuilder = UriComponentsBuilder.fromHttpUrl(createURLWithPort("/make-move"))
-                .queryParam("x", 0)
-                .queryParam("y", 1)
-                .queryParam("player", 'O');
-
-        makeMoveX1UriBuilder = UriComponentsBuilder.fromHttpUrl(createURLWithPort("/make-move"))
-                .queryParam("x", 1)
-                .queryParam("y", 1)
-                .queryParam("player", 'X');
+        mockServer = MockRestServiceServer.createServer(restTemplate);
     }
 
     @Test
     public void testStartNewGame() throws Exception {
-        HttpEntity<?> entity = new HttpEntity<>(null, headers);
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setFirstPlayerId(1L);
+        gameDTO.setSecondPlayerId(2L);
+        gameDTO.setBoardLength(5);
+        gameDTO.setWinLineLength(3);
+        gameDTO.setFirstPlayerToken(Token.X);
 
-        ResponseEntity<GameDTO> response = restTemplate.exchange(
-                createURLWithPort("/new-game"), HttpMethod.GET, entity, GameDTO.class);
+        mockServer.expect(ExpectedCount.once(),
+                requestTo("http://localhost:8080/games"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(gameDTO)));
 
-        GameDTO actual = response.getBody();
+        restTemplate.postForObject("http://localhost:8080/games", gameDTO, GameDTO.class);
 
-        // Default values
-        assertThat(actual).isNotNull();
-        assertThat(actual.getBoardLength()).isEqualTo(10);
-        assertThat(actual.getWinLineLength()).isEqualTo(5);
-    }
-
-    @Test
-    public void testStartNewGameWithParams() throws Exception {
-        HttpEntity<?> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<GameDTO> response = restTemplate.exchange(
-                newGameUriBuilder.toUriString(), HttpMethod.GET, entity, GameDTO.class);
-
-        GameDTO actual = response.getBody();
-        assertThat(actual).isNotNull();
-        assertThat(actual.getBoardLength()).isEqualTo(9);
-        assertThat(actual.getWinLineLength()).isEqualTo(4);
+        mockServer.verify();
     }
 
     @Test
     public void testMakeMove() throws Exception {
-        // First start a new game.
-        HttpEntity<?> newGameEntity = new HttpEntity<>(headers);
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setFirstPlayerId(1L);
+        gameDTO.setSecondPlayerId(2L);
+        gameDTO.setBoardLength(5);
+        gameDTO.setWinLineLength(3);
+        gameDTO.setFirstPlayerToken(Token.X);
 
-        ResponseEntity<GameDTO> newGameResponse = restTemplate.exchange(
-                newGameUriBuilder.toUriString(), HttpMethod.GET, newGameEntity, GameDTO.class);
+        GameMoveDTO gameMoveDTO = new GameMoveDTO();
+        gameMoveDTO.setGameId(1L);
+        gameMoveDTO.setPosition(new Point(0, 1));
 
-        GameDTO actual = newGameResponse.getBody();
-        assertThat(actual).isNotNull();
+        mockServer.expect(ExpectedCount.once(),
+                requestTo("http://localhost:8080/games"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(gameDTO)));
 
-        // Then make a O move
-        HttpEntity<?> makeMoveOEntity = new HttpEntity<>(headers);
+        restTemplate.postForObject("http://localhost:8080/games", gameDTO, GameDTO.class);
 
-        ResponseEntity<GameStatusDTO> makeMoveOResponse = restTemplate.exchange(
-                makeMoveO1UriBuilder.toUriString(), HttpMethod.GET, makeMoveOEntity, GameStatusDTO.class);
+        mockServer.verify();
 
-        GameStatusDTO makeMoveOActual = makeMoveOResponse.getBody();
-        assertThat(makeMoveOActual).isNotNull();
-        assertThat(makeMoveOActual.getMoveCount()).isEqualTo(1);
-        assertThat(makeMoveOActual.getBoard().getFields()[1][0]).isEqualTo('O');
+        mockServer.reset();
 
+        mockServer.expect(ExpectedCount.once(),
+                requestTo("http://localhost:8080/game-moves"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(gameMoveDTO)));
 
-        // Then make a X move.
-        HttpEntity<?> makeMoveXEntity = new HttpEntity<>(headers);
+        restTemplate.postForObject("http://localhost:8080/game-moves", gameMoveDTO, GameMoveDTO.class);
 
-        ResponseEntity<GameStatusDTO> makeMoveXResponse = restTemplate.exchange(
-                makeMoveX1UriBuilder.toUriString(), HttpMethod.GET, makeMoveXEntity, GameStatusDTO.class);
-
-        GameStatusDTO makeMoveXActual = makeMoveXResponse.getBody();
-        assertThat(makeMoveXActual).isNotNull();
-        assertThat(makeMoveXActual.getMoveCount()).isEqualTo(2);
-        assertThat(makeMoveXActual.getBoard().getFields()[1][1]).isEqualTo('X');
-    }
-
-    private String createURLWithPort(String uri) {
-        return "http://localhost:" + port + uri;
+        mockServer.verify();
     }
 }

@@ -165,7 +165,7 @@ public class GameService implements GameServiceInterface {
 
         // Find start point on x or y axis
         Point location = new Point(move);
-        while (!location.atZeroAxis(boardSize)) {
+        while (!location.atZeroAxis()) {
             location.moveUp();
             if (diagonal) location.moveLeft();
             else location.moveRight();

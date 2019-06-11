@@ -17,16 +17,6 @@ public class Size {
         this.height = height;
     }
 
-    public Size(Size otherSize) {
-        this.width = otherSize.width;
-        this.height = otherSize.height;
-    }
-
-    // Not equals - this doesn't check if its the same object, but if they are similar.
-    public boolean compareTo(Size otherSize) {
-        return this.width == otherSize.width && this.height == otherSize.height;
-    }
-
     public String toString() {
         return String.format("(%s, %s)", width, height);
     }

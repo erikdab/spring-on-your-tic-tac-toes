@@ -1,5 +1,5 @@
-insert into player
+merge into player
 values(10001,'Erik');
 
-insert into player
+merge into player
 values(10002,'Ravi');

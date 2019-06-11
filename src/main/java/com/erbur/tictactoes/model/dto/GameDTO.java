@@ -15,13 +15,4 @@ public class GameDTO {
 
     private int boardLength;
     private int winLineLength;
-
-    public GameDTO(GameEntity game) {
-        this.setFirstPlayerId(game.getFirstPlayer().getId());
-        this.setSecondPlayerId(game.getSecondPlayer().getId());
-        this.setFirstPlayerToken(game.getFirstPlayerToken());
-        this.setSecondPlayerToken(game.getSecondPlayerToken());
-        this.setBoardLength(game.getBoardLength());
-        this.setWinLineLength(game.getWinLineLength());
-    }
 }

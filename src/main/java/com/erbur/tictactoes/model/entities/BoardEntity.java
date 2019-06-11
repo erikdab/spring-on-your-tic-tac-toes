@@ -20,10 +20,6 @@ public class BoardEntity {
     public BoardEntity(int width, int height) {
         size = new Size(width, height);
 
-        resetBoard();
-    }
-
-    public void resetBoard() {
         fields = new Token[size.getHeight()][size.getWidth()];
         for (int x = 0; x < size.getHeight(); x++) {
             for (int y = 0; y < size.getWidth(); y++) {
