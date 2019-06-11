@@ -103,8 +103,6 @@ public class TicTacToesGameServiceTest {
 
         gameService.newGame2(1L, 2L, Token.O, BOARD_LENGTH, WIN_LINE_LENGTH);
 
-        GameEntity game = gameService.getGame();
-
         Point move = new Point(0, BOARD_LENGTH + 2);
 
         thrown.expect(IllegalArgumentException.class);
@@ -117,8 +115,6 @@ public class TicTacToesGameServiceTest {
         GameService gameService = new GameService(gameRepository, gameMoveRepository, playerRepository);
 
         gameService.newGame2(1L, 2L, Token.O, BOARD_LENGTH, WIN_LINE_LENGTH);
-
-        GameEntity game = gameService.getGame();
 
         Point move = new Point(0, BOARD_LENGTH + 2);
 

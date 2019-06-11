@@ -15,7 +15,6 @@ public class GameTest {
 
     private PlayerEntity[] players = new PlayerEntity[]{new PlayerEntity("Frank"), new PlayerEntity("Erik")};
     private PlayerEntity[] players1 = new PlayerEntity[]{new PlayerEntity("Frank")};
-    private PlayerEntity[] players3 = new PlayerEntity[]{new PlayerEntity("Frank"), new PlayerEntity("Erik"), new PlayerEntity("Frederyk")};
     private PlayerEntity outsider = new PlayerEntity("Frederyk");
 
     @Rule
